@@ -32,7 +32,7 @@ pipeline{
         stage('Build'){
             steps{
                 sh """
-                    zip -r Backend.${appVersion}.zip * -x Jenkinsfile -x Backend.${appVersion}.zip
+                    zip -r -q Backend.${appVersion}.zip * -x Jenkinsfile -x Backend.${appVersion}.zip
                     ls -ltr
                 """
             }
@@ -42,7 +42,7 @@ pipeline{
     post{
         always{
             echo 'I will run always'
-            // deleteDir()
+            deleteDir()
         }
         failure { 
             echo 'I will run when the build failed!'
