@@ -34,7 +34,7 @@ pipeline{
     post{
         always{
             echo 'I will run always'
-            deleteDir()
+            // deleteDir()
         }
         failure { 
             echo 'I will run when the build failed!'
