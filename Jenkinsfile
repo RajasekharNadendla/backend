@@ -9,6 +9,7 @@ pipeline{
     }
     environment{
         def appVersion = ''
+        nexusUrl= 'nexus.rajasekhar.store:8081'
     }
     stages{
          stage('Read the version'){
@@ -35,6 +36,28 @@ pipeline{
                     zip -r -q Backend.${appVersion}.zip * -x Jenkinsfile -x Backend.${appVersion}.zip
                     ls -ltr
                 """
+            }
+        }
+        stage('Nexus Artifact Upload'){
+            steps{
+                script{
+                    nexusArtifactUploader(
+                        nexusVersion: 'nexus3',
+                        protocol: 'http',
+                        nexusUrl: "${nexusUrl}",
+                        groupId: 'com.expense',
+                        version: "${appVersion}",
+                        repository: "backend",
+                        credentialsId: 'nexus-auth',
+                        artifacts: [
+                        [artifactId: "backend",
+                            classifier: '',
+                            file: "backend-" + "${appVersion}" + '.zip',
+                            type: 'zip']
+                        ]
+                    )
+
+                }
             }
         }
         
